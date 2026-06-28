@@ -23,6 +23,7 @@ const notoSansSC = Noto_Sans_SC({
 export const metadata: Metadata = {
   title: "Nonta | 宠物与人的温暖时光",
   description: "Nonta 宠物用品 — 为你的爱宠提供优质生活",
+  icons: { icon: "/favicon.ico", apple: "/nonta-icon.png" },
 };
 
 export default function RootLayout({

@@ -20,9 +20,10 @@ export function Header() {
         <div className="container-page">
           <div className="flex items-center justify-between h-16">
             {/* Left: Logo */}
-            <Link href="/" className="shrink-0">
+            <Link href="/" className="shrink-0 flex items-center gap-2.5 group">
+              <img src="/nonta-icon.png" alt="Nonta" className="w-7 h-7 rounded-full transition-transform group-hover:scale-110" />
               <span
-                className="text-[#1C1917] text-xl font-bold tracking-tight hover:opacity-70 transition-opacity"
+                className="text-[#1C1917] text-lg font-bold tracking-tight group-hover:opacity-70 transition-opacity"
                 style={{ fontFamily: "var(--font-display)" }}
               >
                 NONTA
