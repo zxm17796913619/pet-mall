@@ -1,26 +1,214 @@
 @import "tailwindcss";
 
+/* ============================================================
+   Nonta 风格设计令牌
+   ============================================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Brand colors — nonta warm palette */
+  --brand: #B39B7E;
+  --brand-light: #C9B59C;
+  --brand-dark: #8C7355;
+  --brand-darker: #6B5A45;
+
+  /* Accent */
+  --gold: #BF8947;
+  --gold-light: #E9B876;
+
+  /* Sale / Price */
+  --sale: #FF3F54;
+  --sale-light: #FFEFF3;
+
+  /* Backgrounds — warm cream series */
+  --bg-warm: #FEFAF5;
+  --bg-cream: #FAF6F3;
+  --bg-beige: #F8F5F0;
+  --bg-light: #F5F1EB;
+
+  /* Standard */
+  --bg-white: #FFFFFF;
+  --bg-gray: #F5F5F5;
+  --bg-table-alt: #FCF8F4;
+
+  /* Text */
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --text-brand: #8C7355;
+
+  /* Borders */
+  --border-color: #E5E5E5;
+  --border-light: #EEEEEE;
+
+  /* Radius — nonta uses generous rounding */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 20px;
+  --radius-xl: 30px;
+  --radius-full: 9999px;
+
+  /* Typography */
+  --font-display: 'Montserrat', sans-serif;
+  --font-body: 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+  --font-size-base: 16px;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--bg-white);
+  --color-foreground: var(--text-primary);
+  --color-brand: var(--brand);
+  --color-brand-light: var(--brand-light);
+  --color-brand-dark: var(--brand-dark);
+  --color-sale: var(--sale);
+  --color-gold: var(--gold);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+  --radius: var(--radius-md);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Base styles */
+* {
+  border-color: var(--border-color);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-warm);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar hide for scrollable areas */
+.scrollbar-hide::-webkit-scrollbar {
+  width: 0;
+  display: none;
+}
+
+/* Table styles — matching nonta */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  max-width: 200px;
+  min-height: 59px;
+  padding: 0 10px;
+}
+
+th {
+  font-weight: 700;
+}
+
+tr:nth-child(odd) {
+  background: var(--bg-white);
+}
+
+tr:nth-child(even) {
+  background: var(--bg-table-alt);
+}
+
+tr th:first-child,
+tr td:first-child {
+  padding-left: 40px;
+}
+
+tr th:last-child,
+tr td:last-child {
+  padding-right: 40px;
+}
+
+@media (max-width: 639px) {
+  table {
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    display: table;
+    overflow-x: auto;
+  }
+  th, td {
+    max-width: none;
+    padding: 0 6px;
+    font-size: 14px;
+  }
+  tr th:first-child,
+  tr td:first-child {
+    padding-left: 12px;
+  }
+  tr th:last-child,
+  tr td:last-child {
+    padding-right: 12px;
+  }
+}
+
+/* Decorative dot element — nonta style */
+.decorative-dot {
+  padding-left: 16px;
+  position: relative;
+}
+
+.decorative-dot::after {
+  content: "";
+  background-color: var(--gold-light);
+  border-radius: 2px;
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+/* Brand button style */
+.btn-brand {
+  background-color: var(--brand);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  padding: 10px 24px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-brand:hover {
+  background-color: var(--brand-dark);
+}
+
+.btn-brand-outline {
+  background-color: transparent;
+  color: var(--brand);
+  border: 1px solid var(--brand);
+  border-radius: var(--radius-sm);
+  padding: 10px 24px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-brand-outline:hover {
+  background-color: var(--brand);
+  color: #fff;
+}
+
+/* Card style */
+.card-warm {
+  background: var(--bg-white);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+
+.card-warm:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
