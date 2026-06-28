@@ -27,8 +27,8 @@ export const products: Product[] = [
     brand: "Nonta",
     petType: "dog",
     images: [
-      { id: "img1a", productId: "p1", url: "https://images.unsplash.com/photo-1541599468348-4ed0312aac1e?w=600&q=80", alt: "暖黄宠物窝垫", sortOrder: 0, isPrimary: true },
-      { id: "img1b", productId: "p1", url: "https://images.unsplash.com/photo-1544568100-847a948585b9?w=600&q=80", alt: "灰色宠物窝垫", sortOrder: 1, isPrimary: false },
+      { id: "img1a", productId: "p1", url: "https://images.unsplash.com/photo-1588943211346-0908a1fb0b01?w=600&q=80", alt: "暖黄宠物窝垫", sortOrder: 0, isPrimary: true },
+      { id: "img1b", productId: "p1", url: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=600&q=80", alt: "灰色宠物窝垫", sortOrder: 1, isPrimary: false },
     ],
     variants: [
       { id: "v1", productId: "p1", name: "S 号 · 暖黄", sku: "BED001-S-Y", price: 138, stock: 20, isActive: true },

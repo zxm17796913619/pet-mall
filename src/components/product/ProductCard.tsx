@@ -8,6 +8,7 @@ import { useCart } from "@/hooks/useCart";
 import { ShoppingCart } from "lucide-react";
 import toast from "react-hot-toast";
 import type { Product } from "@/types";
+import { BlurImage } from "@/components/ui/BlurImage";
 
 export function ProductCard({ product, index = 0 }: { product: Product; index?: number }) {
   const { addItem } = useCart();
@@ -32,13 +33,18 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
         {/* Image */}
         <div className="relative aspect-[4/5] bg-[#F3EFEA] rounded-lg overflow-hidden mb-4">
           {primaryImage && (
-            <motion.img
-              src={primaryImage.url}
-              alt={primaryImage.alt ?? product.name}
-              className="w-full h-full object-cover"
+            <motion.div
               animate={{ scale: isHovered ? 1.04 : 1 }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            />
+              className="w-full h-full"
+            >
+              <BlurImage
+                src={primaryImage.url}
+                alt={primaryImage.alt ?? product.name}
+                className="w-full h-full"
+                aspectRatio="aspect-[4/5]"
+              />
+            </motion.div>
           )}
 
           {/* Tags */}

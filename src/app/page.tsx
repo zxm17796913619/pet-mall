@@ -2,11 +2,13 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { PET_CATEGORIES, TRUST_BADGES } from "@/lib/constants";
 import { products } from "@/lib/mock-data";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { ProductCard } from "@/components/product/ProductCard";
+import { BlurImage } from "@/components/ui/BlurImage";
+import { Magnetic } from "@/components/ui/Magnetic";
 
 function CountUp({ target }: { target: number }) {
   const [c, set] = useState(0); const [s, st] = useState(false); const r = useRef<HTMLSpanElement>(null);
@@ -18,22 +20,24 @@ function CountUp({ target }: { target: number }) {
 export default function HomePage() {
   const featured = products.filter((p) => p.isFeatured);
   const newest = [...products].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 4);
+  const { scrollY } = useScroll();
+  const heroY = useTransform(scrollY, [0, 800], [0, 200]);
+  const heroOpacity = useTransform(scrollY, [0, 600], [1, 0.3]);
 
   return (
     <div>
       {/* ================================================================ */}
-      {/* HERO — Full bleed, dramatic typography                          */}
+      {/* HERO — Full bleed, parallax                                     */}
       {/* ================================================================ */}
-      <section className="relative min-h-[90vh] flex items-center bg-[#F3EFEA]">
-        {/* Subtle pattern overlay */}
+      <section className="relative h-screen flex items-center bg-[#F3EFEA] overflow-hidden">
         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "radial-gradient(circle, #1C1917 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
-        <div className="container-page relative z-10 py-24 md:py-32">
+        <motion.div className="container-page relative z-10 w-full" style={{ y: heroY, opacity: heroOpacity }}>
           <div className="max-w-[640px]">
             <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}>
               <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#B8753E] mb-6 block">
                 Premium Pet Goods
               </span>
-              <h1 className="text-[42px] sm:text-[64px] lg:text-[80px] font-bold leading-[0.95] tracking-[-0.02em] text-[#1C1917] mb-8" style={{ fontFamily: "var(--font-display)" }}>
+              <h1 className="text-[46px] sm:text-[72px] lg:text-[88px] font-bold leading-[0.92] tracking-[-0.03em] text-[#1C1917] mb-8" style={{ fontFamily: "var(--font-display)" }}>
                 与宠物一起<br />
                 <span className="text-[#B8753E]">自由与温暖</span>
               </h1>
@@ -42,16 +46,20 @@ export default function HomePage() {
                 功能与美的融合，为爱宠带来最贴心的呵护。
               </p>
               <div className="flex flex-wrap gap-4">
-                <Link href="/products" className="btn-primary">
-                  探索产品 <ArrowRight size={15} />
-                </Link>
-                <Link href="/story" className="btn-outline">
-                  品牌故事
-                </Link>
+                <Magnetic>
+                  <Link href="/products" className="btn-primary">
+                    探索产品 <ArrowRight size={15} />
+                  </Link>
+                </Magnetic>
+                <Magnetic>
+                  <Link href="/story" className="btn-outline">
+                    品牌故事
+                  </Link>
+                </Magnetic>
               </div>
             </motion.div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* ================================================================ */}
@@ -148,8 +156,8 @@ export default function HomePage() {
               </Link>
             </motion.div>
             <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="relative">
-              <div className="aspect-[4/5] bg-[#F3EFEA] rounded-lg overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1544568100-847a948585b9?w=800&q=85" alt="Nonta 品牌" className="w-full h-full object-cover" />
+              <div className="aspect-[4/5] rounded-lg overflow-hidden">
+                <BlurImage src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=800&q=85" alt="Nonta 品牌" className="w-full h-full object-cover" aspectRatio="aspect-[4/5]" />
               </div>
               <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-lg shadow-sm border border-[#F0EBE3] hidden md:block">
                 <p className="text-[11px] font-semibold text-[#B8753E] uppercase tracking-[0.2em]">Since</p>
