@@ -22,7 +22,7 @@ export default function OrderDetailPage() {
     return (
       <div className="max-w-[760px] mx-auto px-[20px] py-[60px] text-center">
         <p className="text-[16px] text-[#999] mb-[20px]">订单未找到</p>
-        <Link href="/mine" className="btn-brand-outline">返回我的订单</Link>
+        <Link href="/mine" className="btn-outline">返回我的订单</Link>
       </div>
     );
   }

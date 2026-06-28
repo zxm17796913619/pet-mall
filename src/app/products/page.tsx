@@ -133,7 +133,7 @@ export default function ProductsPage() {
                     selectedPet === cat.key ? "bg-[#B39B7E] text-white" : "text-[#666] hover:bg-[#F8F5F0]"
                   }`}
                 >
-                  {cat.icon} {cat.name}
+                  <cat.icon size={14} /> {cat.name}
                 </button>
               ))}
             </div>

@@ -84,7 +84,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="btn-brand w-full py-[12px] text-[16px] disabled:opacity-50"
+              className="btn-primary w-full py-[12px] text-[16px] disabled:opacity-50"
             >
               {loading ? "登录中..." : "登录"}
             </button>

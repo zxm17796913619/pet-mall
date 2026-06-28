@@ -57,7 +57,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
     e.stopPropagation();
     addItem(product);
     toast.success("已加入购物车", {
-      icon: "🛒",
+      icon: "✓",
       style: { borderRadius: "10px", background: "#333", color: "#fff" },
     });
   };
@@ -85,7 +85,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
     >
       <Link
         href={`/products/${product.slug}`}
-        className="card-warm group block cursor-pointer"
+        className="card group block cursor-pointer"
         style={{ transformStyle: "preserve-3d" }}
       >
         {/* Image container */}
@@ -214,7 +214,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
 // Skeleton loading card
 export function ProductCardSkeleton() {
   return (
-    <div className="card-warm animate-pulse">
+    <div className="card animate-pulse">
       <div className="aspect-[1/1] bg-[#EEE]" />
       <div className="p-[16px] space-y-[10px]">
         <div className="h-[16px] bg-[#EEE] rounded w-[60%]" />

@@ -49,7 +49,7 @@ export default function ProductDetailPage() {
           animate={{ opacity: 1, scale: 1 }}
         >
           <p className="text-[18px] text-[#999] mb-[20px]">商品未找到</p>
-          <Link href="/products" className="btn-brand-outline">
+          <Link href="/products" className="btn-outline">
             返回商品列表
           </Link>
         </motion.div>
@@ -67,7 +67,7 @@ export default function ProductDetailPage() {
   const handleAddToCart = () => {
     addItem(product, selectedVariant, quantity);
     toast.success("已加入购物车", {
-      icon: "🛒",
+      icon: "✓",
       style: { borderRadius: "10px", background: "#333", color: "#fff" },
     });
   };
@@ -314,7 +314,7 @@ export default function ProductDetailPage() {
                 whileTap={{ scale: 0.98 }}
                 onClick={handleAddToCart}
                 disabled={product.stock === 0}
-                className="btn-brand flex-1 px-[30px] py-[13px] text-[16px] rounded-[10px] disabled:opacity-50 disabled:cursor-not-allowed gap-[8px]"
+                className="btn-primary flex-1 px-[30px] py-[13px] text-[16px] rounded-[10px] disabled:opacity-50 disabled:cursor-not-allowed gap-[8px]"
               >
                 <ShoppingCart size={18} />
                 加入购物车

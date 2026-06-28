@@ -1,214 +1,259 @@
 @import "tailwindcss";
 
 /* ============================================================
-   Nonta 风格设计令牌
+   Swiss Minimalist Design System
    ============================================================ */
 
 :root {
-  /* Brand colors — nonta warm palette */
-  --brand: #B39B7E;
-  --brand-light: #C9B59C;
-  --brand-dark: #8C7355;
-  --brand-darker: #6B5A45;
+  /* ── Core palette ── */
+  --stone-50: #FAFAF8;
+  --stone-100: #F5F3F0;
+  --stone-200: #EBE7E2;
+  --stone-300: #D7D1C9;
+  --stone-500: #9C958B;
+  --stone-700: #5C5550;
+  --stone-900: #2D2926;
 
-  /* Accent */
-  --gold: #BF8947;
-  --gold-light: #E9B876;
+  /* Brand — warm taupe */
+  --brand: #A18A6B;
+  --brand-hover: #8B7355;
+  --brand-subtle: #F5F1EB;
 
-  /* Sale / Price */
-  --sale: #FF3F54;
-  --sale-light: #FFEFF3;
+  /* Semantic */
+  --accent: #6B8F71;
+  --danger: #C45450;
+  --danger-subtle: #FDF5F4;
 
-  /* Backgrounds — warm cream series */
-  --bg-warm: #FEFAF5;
-  --bg-cream: #FAF6F3;
-  --bg-beige: #F8F5F0;
-  --bg-light: #F5F1EB;
-
-  /* Standard */
-  --bg-white: #FFFFFF;
-  --bg-gray: #F5F5F5;
-  --bg-table-alt: #FCF8F4;
+  /* Backgrounds */
+  --bg-page: #FBF9F7;
+  --bg-surface: #FFFFFF;
+  --bg-muted: #F5F3F0;
 
   /* Text */
-  --text-primary: #333333;
-  --text-secondary: #666666;
-  --text-muted: #999999;
-  --text-brand: #8C7355;
+  --text-primary: #2D2926;
+  --text-secondary: #5C5550;
+  --text-tertiary: #9C958B;
+  --text-placeholder: #BFB8B0;
 
   /* Borders */
-  --border-color: #E5E5E5;
-  --border-light: #EEEEEE;
+  --border-default: #EBE7E2;
+  --border-subtle: #F0EDE9;
 
-  /* Radius — nonta uses generous rounding */
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 20px;
-  --radius-xl: 30px;
+  /* Spacing scale (multiples of 4px) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* Radius */
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
   --radius-full: 9999px;
 
   /* Typography */
-  --font-display: 'Montserrat', sans-serif;
-  --font-body: 'Noto Sans SC', 'Noto Sans JP', sans-serif;
-  --font-size-base: 16px;
+  --font-display: 'Montserrat', system-ui, sans-serif;
+  --font-body: 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+  --font-size-base: 15px;
 }
 
 @theme inline {
-  --color-background: var(--bg-white);
+  --color-background: var(--bg-page);
   --color-foreground: var(--text-primary);
   --color-brand: var(--brand);
-  --color-brand-light: var(--brand-light);
-  --color-brand-dark: var(--brand-dark);
-  --color-sale: var(--sale);
-  --color-gold: var(--gold);
   --font-sans: var(--font-body);
   --font-display: var(--font-display);
-  --radius: var(--radius-md);
 }
 
-/* Base styles */
-* {
-  border-color: var(--border-color);
-}
+/* ── Base ── */
+* { border-color: var(--border-default); }
 
 body {
-  background: var(--bg-warm);
+  background: var(--bg-page);
   color: var(--text-primary);
   font-family: var(--font-body);
   font-size: var(--font-size-base);
-  line-height: 1.6;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  letter-spacing: 0.01em;
 }
 
-/* Scrollbar hide for scrollable areas */
-.scrollbar-hide::-webkit-scrollbar {
-  width: 0;
-  display: none;
+/* ── Container ── */
+.container-page {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-5);
+  padding-right: var(--space-5);
+}
+@media (min-width: 640px) {
+  .container-page {
+    padding-left: var(--space-10);
+    padding-right: var(--space-10);
+  }
 }
 
-/* Table styles — matching nonta */
-table {
-  border-collapse: collapse;
+/* ── Section spacing ── */
+.section-padding {
+  padding-top: var(--space-16);
+  padding-bottom: var(--space-16);
+}
+@media (min-width: 640px) {
+  .section-padding {
+    padding-top: var(--space-24);
+    padding-bottom: var(--space-24);
+  }
+}
+
+/* ── Button: Primary ── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 10px var(--space-6);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  color: #FFFFFF;
+  background: var(--brand);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.btn-primary:hover { background: var(--brand-hover); }
+.btn-primary:active { transform: scale(0.98); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Button: Outline ── */
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 10px var(--space-6);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--brand);
+  background: transparent;
+  border: 1.5px solid var(--brand);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.btn-outline:hover { background: var(--brand); color: #FFFFFF; }
+.btn-outline:active { transform: scale(0.98); }
+
+/* ── Button: Ghost ── */
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  font-size: 14px;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+.btn-ghost:hover { color: var(--brand); background: var(--brand-subtle); }
+
+/* ── Card ── */
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+.card:hover { box-shadow: 0 2px 16px rgba(45, 41, 38, 0.06); }
+
+/* ── Input ── */
+.input-field {
   width: 100%;
+  padding: 10px var(--space-4);
+  font-size: 14px;
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  background: var(--bg-muted);
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.input-field::placeholder { color: var(--text-placeholder); }
+.input-field:focus {
+  border-color: var(--brand);
+  background: var(--bg-surface);
 }
 
-th, td {
-  max-width: 200px;
-  min-height: 59px;
-  padding: 0 10px;
+/* ── Badge ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--space-2);
+  font-size: 11px;
+  font-weight: 500;
+  border-radius: var(--radius-xs);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
-th {
-  font-weight: 700;
+/* ── Divider ── */
+.divider {
+  height: 1px;
+  background: var(--border-default);
+  border: none;
+  margin: 0;
 }
 
-tr:nth-child(odd) {
-  background: var(--bg-white);
-}
-
-tr:nth-child(even) {
-  background: var(--bg-table-alt);
-}
-
-tr th:first-child,
-tr td:first-child {
-  padding-left: 40px;
-}
-
-tr th:last-child,
-tr td:last-child {
-  padding-right: 40px;
-}
-
-@media (max-width: 639px) {
-  table {
-    -webkit-overflow-scrolling: touch;
-    width: 100%;
-    display: table;
-    overflow-x: auto;
-  }
-  th, td {
-    max-width: none;
-    padding: 0 6px;
-    font-size: 14px;
-  }
-  tr th:first-child,
-  tr td:first-child {
-    padding-left: 12px;
-  }
-  tr th:last-child,
-  tr td:last-child {
-    padding-right: 12px;
-  }
-}
-
-/* Decorative dot element — nonta style */
+/* ── Decorative dot ── */
 .decorative-dot {
-  padding-left: 16px;
+  padding-left: 18px;
   position: relative;
 }
-
 .decorative-dot::after {
   content: "";
-  background-color: var(--gold-light);
-  border-radius: 2px;
-  width: 10px;
-  height: 10px;
+  background-color: var(--brand);
+  border-radius: 50%;
+  width: 8px;
+  height: 8px;
   position: absolute;
   top: 50%;
   left: 0;
   transform: translateY(-50%);
 }
 
-/* Brand button style */
-.btn-brand {
-  background-color: var(--brand);
-  color: #fff;
-  border-radius: var(--radius-sm);
-  padding: 10px 24px;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  border: none;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
+/* ── Scrollbar hide ── */
+.scrollbar-hide::-webkit-scrollbar { width: 0; display: none; }
 
-.btn-brand:hover {
-  background-color: var(--brand-dark);
-}
-
-.btn-brand-outline {
-  background-color: transparent;
-  color: var(--brand);
-  border: 1px solid var(--brand);
-  border-radius: var(--radius-sm);
-  padding: 10px 24px;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.btn-brand-outline:hover {
-  background-color: var(--brand);
-  color: #fff;
-}
-
-/* Card style */
-.card-warm {
-  background: var(--bg-white);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  transition: box-shadow 0.3s ease;
-}
-
-.card-warm:hover {
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+/* ── Table ── */
+table { border-collapse: collapse; width: 100%; }
+th, td { padding: var(--space-3) var(--space-4); text-align: left; }
+th { font-size: 12px; font-weight: 500; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.06em; }
+td { font-size: 14px; }
+tr { border-bottom: 1px solid var(--border-subtle); }
+@media (max-width: 639px) {
+  table { display: table; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  th, td { padding: var(--space-2) var(--space-3); font-size: 13px; }
 }

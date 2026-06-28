@@ -61,7 +61,7 @@ export default function MinePage() {
               {!user && (
                 <Link
                   href="/login"
-                  className="btn-brand text-center text-[14px] py-[10px] mt-[16px]"
+                  className="btn-primary text-center text-[14px] py-[10px] mt-[16px]"
                 >
                   登录 / 注册
                 </Link>
@@ -76,13 +76,13 @@ export default function MinePage() {
             <div className="bg-white p-[40px] rounded-[20px] text-center">
               <Package size={48} className="text-[#DDD] mx-auto mb-[16px]" />
               <p className="text-[16px] text-[#999] mb-[16px]">请先登录查看订单</p>
-              <Link href="/login" className="btn-brand-outline">去登录</Link>
+              <Link href="/login" className="btn-outline">去登录</Link>
             </div>
           ) : orders.length === 0 ? (
             <div className="bg-white p-[40px] rounded-[20px] text-center">
               <Package size={48} className="text-[#DDD] mx-auto mb-[16px]" />
               <p className="text-[16px] text-[#999] mb-[16px]">暂无订单</p>
-              <Link href="/products" className="btn-brand-outline">去选购</Link>
+              <Link href="/products" className="btn-outline">去选购</Link>
             </div>
           ) : (
             <div className="flex flex-col gap-[16px]">

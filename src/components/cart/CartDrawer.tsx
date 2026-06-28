@@ -178,7 +178,7 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   <Link
                     href="/checkout"
                     onClick={onClose}
-                    className="btn-brand w-full text-[16px] py-[12px] text-center block"
+                    className="btn-primary w-full text-[16px] py-[12px] text-center block"
                   >
                     去结算
                   </Link>

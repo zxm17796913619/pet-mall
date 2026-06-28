@@ -16,25 +16,24 @@ export function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-[#E5E5E5]">
-        {/* Top bar */}
-        <div className="hidden sm:block bg-[#F8F5F0] text-[#8C7355] text-[13px] py-[4px] px-[20px] text-center overflow-hidden">
+      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-lg border-b border-stone-200">
+        {/* Announcement bar */}
+        <div className="bg-stone-100 text-stone-600 text-[12px] py-[6px] text-center overflow-hidden tracking-wide">
           <motion.div
             animate={{ x: ["100%", "-100%"] }}
-            transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+            transition={{ repeat: Infinity, duration: 22, ease: "linear" }}
             className="whitespace-nowrap inline-block"
           >
-            全场满99元包邮 · 新用户注册享9折优惠 · 宠物用品一站式购齐
+            全场满 99 包邮 · 新用户注册享 9 折优惠 · 宠物用品一站式购齐
           </motion.div>
         </div>
 
-        {/* Main header */}
-        <div className="max-w-[1200px] mx-auto px-[20px] sm:px-[40px]">
-          <div className="flex items-center justify-between h-[56px] sm:h-[70px]">
+        <div className="container-page">
+          <div className="flex items-center justify-between h-14 sm:h-16">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-[10px] group">
+            <Link href="/" className="flex items-center group shrink-0">
               <span
-                className="text-[#B39B7E] text-[26px] sm:text-[32px] font-bold transition-transform duration-300 group-hover:scale-105"
+                className="text-brand text-[22px] sm:text-[26px] font-bold tracking-tight transition-opacity group-hover:opacity-80"
                 style={{ fontFamily: "var(--font-display)" }}
               >
                 Nonta
@@ -42,61 +41,63 @@ export function Header() {
             </Link>
 
             {/* Desktop nav */}
-            <nav className="hidden lg:flex items-center gap-[30px]">
+            <nav className="hidden lg:flex items-center gap-1">
               {NAV_LINKS.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-[14px] text-[#333] hover:text-[#B39B7E] transition-colors relative group py-[4px]"
+                  className="px-3 py-2 text-[13px] text-stone-600 hover:text-stone-900 transition-colors rounded-md hover:bg-stone-100"
                 >
                   {link.label}
-                  <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-[#B39B7E] transition-all duration-300 group-hover:w-full" />
                 </Link>
               ))}
             </nav>
 
             {/* Actions */}
-            <div className="flex items-center gap-[12px]">
-              {/* Search toggle */}
+            <div className="flex items-center gap-1 sm:gap-2">
               <button
                 onClick={() => setSearchOpen(!searchOpen)}
-                className="p-[8px] text-[#333] hover:text-[#B39B7E] transition-colors rounded-full hover:bg-[#F8F5F0]"
+                className="btn-ghost h-9 w-9 rounded-full"
+                aria-label="搜索"
               >
-                <Search size={20} />
+                <Search size={18} />
               </button>
 
-              {/* Cart button → opens drawer */}
               <button
                 onClick={() => setCartOpen(true)}
-                className="p-[8px] text-[#333] hover:text-[#B39B7E] transition-colors rounded-full hover:bg-[#F8F5F0] relative"
+                className="btn-ghost h-9 w-9 rounded-full relative"
+                aria-label="购物车"
               >
-                <ShoppingCart size={20} />
-                {itemCount > 0 && (
-                  <motion.span
-                    key={itemCount}
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className="absolute -top-0 -right-0 bg-[#FF3F54] text-white text-[10px] w-[18px] h-[18px] rounded-full flex items-center justify-center font-bold"
-                  >
-                    {itemCount > 99 ? "99+" : itemCount}
-                  </motion.span>
-                )}
+                <ShoppingCart size={18} />
+                <AnimatePresence>
+                  {itemCount > 0 && (
+                    <motion.span
+                      key={itemCount}
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      exit={{ scale: 0 }}
+                      className="absolute -top-0.5 -right-0.5 bg-stone-900 text-white text-[10px] font-medium min-w-[18px] h-[18px] rounded-full flex items-center justify-center leading-none"
+                    >
+                      {itemCount > 99 ? "99+" : itemCount}
+                    </motion.span>
+                  )}
+                </AnimatePresence>
               </button>
 
-              {/* User */}
               <Link
                 href="/login"
-                className="p-[8px] text-[#333] hover:text-[#B39B7E] transition-colors rounded-full hover:bg-[#F8F5F0]"
+                className="btn-ghost h-9 w-9 rounded-full"
+                aria-label="账户"
               >
-                <User size={20} />
+                <User size={18} />
               </Link>
 
-              {/* Mobile menu toggle */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden p-[8px] text-[#333] rounded-full hover:bg-[#F8F5F0]"
+                className="lg:hidden btn-ghost h-9 w-9 rounded-full"
+                aria-label="菜单"
               >
-                {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+                {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
               </button>
             </div>
           </div>
@@ -108,26 +109,26 @@ export function Header() {
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: "auto", opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                className="overflow-hidden pb-[16px]"
+                className="overflow-hidden"
               >
-                <div className="relative">
+                <div className="relative pb-5">
+                  <Search
+                    size={16}
+                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400"
+                  />
                   <input
                     type="text"
-                    placeholder="搜索你想要的宠物用品..."
-                    className="w-full px-[16px] py-[10px] pl-[40px] text-[14px] border border-[#E5E5E5] rounded-[8px] bg-[#F8F5F0] outline-none focus:border-[#B39B7E] focus:ring-2 focus:ring-[#B39B7E]/20 transition-all"
+                    placeholder="搜索商品…"
+                    className="input-field pl-10"
                     autoFocus
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
-                        const val = (e.target as HTMLInputElement).value;
-                        if (val.trim()) {
-                          window.location.href = `/products?search=${encodeURIComponent(val.trim())}`;
+                        const val = (e.target as HTMLInputElement).value.trim();
+                        if (val) {
+                          window.location.href = `/products?search=${encodeURIComponent(val)}`;
                         }
                       }
                     }}
-                  />
-                  <Search
-                    size={16}
-                    className="absolute left-[14px] top-1/2 -translate-y-1/2 text-[#999]"
                   />
                 </div>
               </motion.div>
@@ -142,20 +143,20 @@ export function Header() {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="lg:hidden border-t border-[#E5E5E5] bg-white overflow-hidden"
+              className="lg:hidden border-t border-stone-200 bg-white overflow-hidden"
             >
-              <div className="px-[20px] py-[12px] flex flex-col">
+              <div className="container-page py-4 flex flex-col">
                 {NAV_LINKS.map((link, i) => (
                   <motion.div
                     key={link.href}
-                    initial={{ x: -20, opacity: 0 }}
+                    initial={{ x: -12, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: i * 0.05 }}
+                    transition={{ delay: i * 0.04 }}
                   >
                     <Link
                       href={link.href}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="block py-[14px] text-[16px] text-[#333] hover:text-[#B39B7E] border-b border-[#F5F5F5] last:border-0 transition-colors"
+                      className="block py-3 text-[15px] text-stone-700 hover:text-stone-900 border-b border-stone-100 last:border-0 transition-colors"
                     >
                       {link.label}
                     </Link>
@@ -167,7 +168,6 @@ export function Header() {
         </AnimatePresence>
       </header>
 
-      {/* Cart Drawer */}
       <CartDrawer isOpen={cartOpen} onClose={() => setCartOpen(false)} />
     </>
   );

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { STORE } from "@/lib/constants";
+import { Phone, Mail, MapPin } from "lucide-react";
 
 export default function AboutPage() {
   return (
@@ -22,9 +23,9 @@ export default function AboutPage() {
         <div>
           <h3 className="text-[16px] font-bold text-[#333] mb-[8px]">联系方式</h3>
           <div className="text-[14px] text-[#666] leading-[26px] space-y-[4px]">
-            <p>📞 电话：{STORE.phone}</p>
-            <p>📧 邮箱：{STORE.email}</p>
-            <p>📍 地址：{STORE.address}</p>
+            <p className="flex items-center gap-2"><Phone size={14} className="text-stone-400 shrink-0" />电话：{STORE.phone}</p>
+            <p className="flex items-center gap-2"><Mail size={14} className="text-stone-400 shrink-0" />邮箱：{STORE.email}</p>
+            <p className="flex items-center gap-2"><MapPin size={14} className="text-stone-400 shrink-0" />地址：{STORE.address}</p>
             <p>🕐 客服时间：周一至周五 9:00 - 18:00</p>
           </div>
         </div>
@@ -49,7 +50,7 @@ export default function AboutPage() {
       </div>
 
       <div className="text-center mt-[40px]">
-        <Link href="/products" className="btn-brand-outline">
+        <Link href="/products" className="btn-outline">
           去选购
         </Link>
       </div>

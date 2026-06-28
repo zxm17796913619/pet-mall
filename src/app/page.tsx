@@ -3,62 +3,51 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { PET_CATEGORIES } from "@/lib/constants";
+import { PET_CATEGORIES, TRUST_BADGES } from "@/lib/constants";
 import { products, banners } from "@/lib/mock-data";
 import { ChevronRight, ArrowRight } from "lucide-react";
 import { ProductCard } from "@/components/product/ProductCard";
 
-function CountUp({ target, duration = 2 }: { target: number; duration?: number }) {
+function CountUp({ target }: { target: number }) {
   const [count, setCount] = useState(0);
-  const [hasStarted, setHasStarted] = useState(false);
+  const [started, setStarted] = useState(false);
   const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasStarted) {
-          setHasStarted(true);
-        }
-      },
-      { threshold: 0.5 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [hasStarted]);
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setStarted(true); }, { threshold: 0.6 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
 
   useEffect(() => {
-    if (!hasStarted) return;
-    let start = 0;
-    const increment = target / (duration * 60);
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= target) {
-        setCount(target);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(start));
-      }
+    if (!started) return;
+    let v = 0;
+    const inc = target / 100;
+    const t = setInterval(() => {
+      v += inc;
+      if (v >= target) { setCount(target); clearInterval(t); }
+      else setCount(Math.floor(v));
     }, 16);
-    return () => clearInterval(timer);
-  }, [hasStarted, target, duration]);
+    return () => clearInterval(t);
+  }, [started, target]);
 
   return <span ref={ref}>{count}</span>;
 }
 
 export default function HomePage() {
   const [currentBanner, setCurrentBanner] = useState(0);
-  const featuredProducts = products.filter((p) => p.isFeatured);
+  const featured = products.filter((p) => p.isFeatured);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentBanner((prev) => (prev + 1) % banners.length);
-    }, 5000);
-    return () => clearInterval(timer);
+    const t = setInterval(() => setCurrentBanner((p) => (p + 1) % banners.length), 5000);
+    return () => clearInterval(t);
   }, []);
 
   return (
     <div>
-      {/* ========== Banner ========== */}
+      {/* ================================================================ */}
+      {/* HERO BANNER                                                    */}
+      {/* ================================================================ */}
       <section className="relative overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div
@@ -66,15 +55,15 @@ export default function HomePage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.7 }}
             className={banners[currentBanner].bgClass}
           >
-            <div className="max-w-[1200px] mx-auto px-[20px] sm:px-[40px] py-[80px] sm:py-[110px] lg:py-[160px] text-center">
+            <div className="container-page py-20 sm:py-28 lg:py-40 text-center">
               <motion.h1
-                initial={{ y: 30, opacity: 0 }}
+                initial={{ y: 24, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.2, duration: 0.6 }}
-                className="text-[32px] sm:text-[48px] lg:text-[62px] font-bold mb-[20px] tracking-wide"
+                transition={{ delay: 0.15, duration: 0.6 }}
+                className="text-[34px] sm:text-[52px] lg:text-[64px] font-bold mb-6 tracking-tight leading-none"
                 style={{ fontFamily: "var(--font-display)" }}
               >
                 <span className={banners[currentBanner].textColor}>
@@ -82,91 +71,74 @@ export default function HomePage() {
                 </span>
               </motion.h1>
               <motion.p
-                initial={{ y: 20, opacity: 0 }}
+                initial={{ y: 16, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.4, duration: 0.6 }}
-                className="text-[14px] sm:text-[16px] lg:text-[18px] text-[#666] mb-[30px] sm:mb-[40px] leading-[28px] sm:leading-[35px] whitespace-pre-line"
+                transition={{ delay: 0.3, duration: 0.6 }}
+                className="text-sm sm:text-base lg:text-lg text-stone-500 mb-10 sm:mb-12 leading-relaxed whitespace-pre-line max-w-lg mx-auto"
               >
                 {banners[currentBanner].subtitle}
               </motion.p>
               <motion.div
-                initial={{ y: 20, opacity: 0 }}
+                initial={{ y: 12, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.6, duration: 0.6 }}
+                transition={{ delay: 0.45, duration: 0.6 }}
               >
-                <Link
-                  href="/products"
-                  className="inline-flex btn-brand px-[40px] py-[12px] sm:py-[14px] text-[16px] gap-[8px] group"
-                >
+                <Link href="/products" className="btn-primary px-8 py-3 text-[15px] group">
                   立即选购
-                  <ChevronRight
-                    size={18}
-                    className="group-hover:translate-x-1 transition-transform"
-                  />
+                  <ChevronRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
                 </Link>
               </motion.div>
             </div>
           </motion.div>
         </AnimatePresence>
 
-        {/* Banner dots */}
-        <div className="flex justify-center gap-[10px] mt-[-30px] pb-[30px]">
+        <div className="flex justify-center gap-2.5 pb-8 -mt-8">
           {banners.map((_, i) => (
             <button
               key={i}
               onClick={() => setCurrentBanner(i)}
-              className={`h-[8px] rounded-full transition-all duration-300 ${
-                i === currentBanner ? "bg-[#B39B7E] w-[28px]" : "bg-[#DDD] w-[8px] hover:bg-[#BBB]"
+              className={`h-2 rounded-full transition-all duration-300 ${
+                i === currentBanner ? "bg-brand w-8" : "bg-stone-300 w-2 hover:bg-stone-400"
               }`}
             />
           ))}
         </div>
       </section>
 
-      {/* ========== 宠物分类入口 ========== */}
-      <section className="pb-[40px] sm:pb-[80px]">
-        <div className="max-w-[1200px] mx-auto px-[20px] sm:px-[40px]">
+      {/* ================================================================ */}
+      {/* CATEGORY ENTRY                                                  */}
+      {/* ================================================================ */}
+      <section className="section-padding">
+        <div className="container-page">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-[30px] sm:mb-[48px]"
+            className="text-center mb-12 sm:mb-16"
           >
-            <h2
-              className="text-[24px] sm:text-[32px] font-bold text-[#333] mb-[10px]"
-              style={{ fontFamily: "var(--font-display)" }}
-            >
+            <span className="badge bg-stone-100 text-stone-500 mb-3">Categories</span>
+            <h2 className="text-2xl sm:text-3xl font-bold text-stone-900 mb-3" style={{ fontFamily: "var(--font-display)" }}>
               为爱宠选购
             </h2>
-            <p className="text-[14px] text-[#999]">
-              选择你的宠物类型，发现专属好物
-            </p>
+            <p className="text-sm text-stone-500">选择你的宠物类型，发现专属好物</p>
           </motion.div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-[12px] sm:gap-[20px]">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-5">
             {PET_CATEGORIES.map((cat, i) => (
               <motion.div
                 key={cat.key}
-                initial={{ opacity: 0, y: 40 }}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.08 }}
-                whileHover={{ y: -6, scale: 1.03 }}
+                transition={{ delay: i * 0.06, duration: 0.4 }}
+                whileHover={{ y: -4 }}
               >
                 <Link
                   href={`/products?pet=${cat.key}`}
-                  className="flex flex-col items-center gap-[12px] p-[24px] sm:p-[30px] rounded-[20px] transition-shadow hover:shadow-lg"
-                  style={{ backgroundColor: cat.color }}
+                  className={`flex flex-col items-center gap-4 p-6 sm:p-8 rounded-2xl transition-shadow hover:shadow-md ${cat.bgClass}`}
                 >
-                  <motion.span
-                    className="text-[40px] sm:text-[50px]"
-                    whileHover={{ scale: 1.2, rotate: [0, -10, 10, 0] }}
-                    transition={{ duration: 0.4 }}
-                  >
-                    {cat.icon}
-                  </motion.span>
-                  <span className="text-[14px] sm:text-[16px] font-medium text-[#333]">
+                  <cat.icon size={32} className="text-stone-600" />
+                  <span className="text-[13px] sm:text-sm font-medium text-stone-700">
                     {cat.name}
                   </span>
                 </Link>
@@ -176,33 +148,27 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ========== 热卖商品 ========== */}
-      <section className="pb-[40px] sm:pb-[80px] bg-white">
-        <div className="max-w-[1200px] mx-auto px-[20px] sm:px-[40px]">
+      {/* ================================================================ */}
+      {/* FEATURED PRODUCTS                                               */}
+      {/* ================================================================ */}
+      <section className="section-padding bg-white">
+        <div className="container-page">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-[30px] sm:mb-[48px] pt-[40px] sm:pt-[80px]"
+            className="text-center mb-12 sm:mb-16"
           >
-            <span className="text-[#B39B7E] text-[13px] font-medium tracking-widest uppercase mb-[8px] block">
-              Hot Sale
-            </span>
-            <h2
-              className="text-[24px] sm:text-[32px] font-bold text-[#333] mb-[10px]"
-              style={{ fontFamily: "var(--font-display)" }}
-            >
+            <span className="badge bg-stone-100 text-stone-500 mb-3">Hot Sale</span>
+            <h2 className="text-2xl sm:text-3xl font-bold text-stone-900 mb-3" style={{ fontFamily: "var(--font-display)" }}>
               热卖推荐
             </h2>
-            <p className="text-[14px] text-[#999]">
-              精选好物，为爱宠带来最好的呵护
-            </p>
+            <p className="text-sm text-stone-500">精选好物，为爱宠带来最好的呵护</p>
           </motion.div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-[12px] sm:gap-[20px]">
-            {featuredProducts.map((product, i) => (
-              <ProductCard key={product.id} product={product} index={i} />
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
+            {featured.map((p, i) => (
+              <ProductCard key={p.id} product={p} index={i} />
             ))}
           </div>
 
@@ -210,91 +176,78 @@ export default function HomePage() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="text-center mt-[40px] sm:mt-[60px]"
+            className="text-center mt-12 sm:mt-16"
           >
-            <Link
-              href="/products"
-              className="btn-brand-outline group text-[15px] px-[30px] py-[12px] gap-[6px]"
-            >
+            <Link href="/products" className="btn-outline group text-[14px] px-7 py-2.5">
               查看全部商品
-              <ArrowRight
-                size={16}
-                className="group-hover:translate-x-1 transition-transform"
-              />
+              <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
             </Link>
           </motion.div>
         </div>
       </section>
 
-      {/* ========== 数据展示条 ========== */}
-      <section className="bg-[#B39B7E] py-[40px] sm:py-[50px]">
-        <div className="max-w-[1000px] mx-auto px-[20px] sm:px-[40px]">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-[20px] text-center text-white">
+      {/* ================================================================ */}
+      {/* STATS BAR                                                       */}
+      {/* ================================================================ */}
+      <section className="bg-stone-900 py-16 sm:py-20">
+        <div className="container-page">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 text-center">
             {[
-              { target: 1280, label: "满意顾客", suffix: "+" },
-              { target: 368, label: "精选商品", suffix: "+" },
-              { target: 98, label: "好评率%", suffix: "%" },
-              { target: 24, label: "小时发货", suffix: "h" },
+              { t: 1280, l: "满意顾客", s: "+" },
+              { t: 368, l: "精选商品", s: "+" },
+              { t: 99, l: "好评率", s: "%" },
+              { t: 24, l: "小时发货", s: "h" },
             ].map((item, i) => (
               <motion.div
-                key={item.label}
-                initial={{ opacity: 0, scale: 0.5 }}
+                key={item.l}
+                initial={{ opacity: 0, scale: 0.8 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1, type: "spring" }}
-                className="flex flex-col items-center gap-[6px]"
+                transition={{ delay: i * 0.08, type: "spring", stiffness: 200 }}
+                className="flex flex-col items-center gap-2"
               >
-                <span
-                  className="text-[28px] sm:text-[36px] font-bold"
-                  style={{ fontFamily: "var(--font-display)" }}
-                >
-                  <CountUp target={item.target} duration={2.5} />
-                  {item.suffix}
+                <span className="text-3xl sm:text-4xl font-bold text-white" style={{ fontFamily: "var(--font-display)" }}>
+                  <CountUp target={item.t} />{item.s}
                 </span>
-                <span className="text-[13px] sm:text-[14px] text-white/80">
-                  {item.label}
-                </span>
+                <span className="text-xs sm:text-sm text-stone-400 tracking-wide">{item.l}</span>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ========== 品牌故事 ========== */}
-      <section className="bg-[#F8F5F0] py-[60px] sm:py-[100px] overflow-hidden">
-        <div className="max-w-[760px] mx-auto px-[20px] sm:px-[40px] text-center">
+      {/* ================================================================ */}
+      {/* BRAND STORY                                                     */}
+      {/* ================================================================ */}
+      <section className="section-padding bg-stone-100">
+        <div className="container-page max-w-[720px] text-center">
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
           >
-            <span className="text-[#B39B7E] text-[13px] tracking-widest uppercase mb-[12px] block">
-              Brand Story
-            </span>
-            <h2
-              className="text-[22px] sm:text-[32px] font-bold text-[#8C7355] mb-[24px]"
-              style={{ fontFamily: "var(--font-display)" }}
-            >
+            <span className="badge bg-white text-stone-500 mb-4">Brand Story</span>
+            <h2 className="text-2xl sm:text-3xl font-bold text-stone-800 mb-8" style={{ fontFamily: "var(--font-display)" }}>
               品牌故事
             </h2>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.2, duration: 0.6 }}
+            transition={{ delay: 0.15 }}
+            className="space-y-5 text-[15px] sm:text-base text-stone-600 leading-relaxed"
           >
-            <p className="text-[14px] sm:text-[16px] text-[#666] leading-[30px] sm:leading-[38px] mb-[16px]">
-              Nonta 源自对宠物的深深热爱。我们相信，宠物不仅是我们生活中的伙伴，更是家庭中的重要成员。
+            <p>
+              Nonta 源自对宠物的深深热爱。我们相信，宠物不仅是生活中的伙伴，更是家庭中不可或缺的成员。
             </p>
-            <p className="text-[14px] sm:text-[16px] text-[#666] leading-[30px] sm:leading-[38px] mb-[16px]">
-              我们以水獭 Nonta 为灵感，致力于为每个养宠家庭提供兼具功能性与优雅设计的产品。
-              每一件商品都经过严格筛选，确保为你的爱宠带来最贴心的呵护。
+            <p>
+              我们以水獭 Nonta 为灵感，致力于为每个养宠家庭提供兼具功能与美的产品。
+              每一件 Nonta 出品，都经过严格甄选，只为给爱宠最贴心的守护。
             </p>
-            <p className="text-[14px] sm:text-[16px] text-[#666] leading-[30px] sm:leading-[38px] mb-[30px]">
-              宠物是家人，是无可替代的伙伴。Nonta，与你一起守护这段温暖的陪伴。
+            <p>
+              宠物是家人。Nonta，与你一起守护这份温暖。
             </p>
           </motion.div>
 
@@ -302,40 +255,38 @@ export default function HomePage() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.4 }}
+            transition={{ delay: 0.3 }}
+            className="mt-10"
           >
             <Link
               href="/story"
-              className="inline-flex items-center gap-[8px] text-[#B39B7E] text-[14px] sm:text-[16px] font-medium hover:underline decorative-dot"
+              className="inline-flex items-center gap-2 text-brand text-sm font-medium decorative-dot hover:opacity-80 transition-opacity"
             >
-              了解更多品牌故事
+              了解更多
             </Link>
           </motion.div>
         </div>
       </section>
 
-      {/* ========== 信任保证 ========== */}
-      <section className="bg-white py-[40px] sm:py-[60px]">
-        <div className="max-w-[1200px] mx-auto px-[20px] sm:px-[40px]">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-[20px] text-center">
-            {[
-              { icon: "🚚", title: "满99包邮", desc: "全国快速配送" },
-              { icon: "🔄", title: "7天退换", desc: "无忧退换货" },
-              { icon: "🎖️", title: "正品保证", desc: "品质严选" },
-              { icon: "💬", title: "在线客服", desc: "工作日9:00-18:00" },
-            ].map((item, i) => (
+      {/* ================================================================ */}
+      {/* TRUST BADGES                                                    */}
+      {/* ================================================================ */}
+      <section className="section-padding bg-white">
+        <div className="container-page">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8 text-center">
+            {TRUST_BADGES.map((item, i) => (
               <motion.div
                 key={item.title}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.4 }}
-                whileHover={{ y: -6 }}
-                className="flex flex-col items-center gap-[8px] py-[24px] px-[16px] rounded-[16px] hover:bg-[#FEFAF5] transition-colors cursor-default"
+                transition={{ delay: i * 0.08 }}
+                whileHover={{ y: -4 }}
+                className="flex flex-col items-center gap-3 py-8 px-4 rounded-2xl hover:bg-stone-50 transition-colors cursor-default"
               >
-                <span className="text-[36px]">{item.icon}</span>
-                <h4 className="text-[16px] font-medium text-[#333]">{item.title}</h4>
-                <p className="text-[12px] text-[#999]">{item.desc}</p>
+                <item.icon size={28} className="text-stone-400" />
+                <h4 className="text-[15px] font-medium text-stone-700">{item.title}</h4>
+                <p className="text-xs text-stone-400">{item.desc}</p>
               </motion.div>
             ))}
           </div>

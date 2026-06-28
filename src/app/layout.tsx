@@ -35,7 +35,7 @@ export default function RootLayout({
       lang="zh-CN"
       className={`${montserrat.variable} ${notoSansSC.variable}`}
     >
-      <body className="min-h-screen flex flex-col bg-[#FEFAF5]">
+      <body className="min-h-screen flex flex-col bg-stone-50">
         <CartProvider>
           <Header />
           <main className="flex-1">{children}</main>

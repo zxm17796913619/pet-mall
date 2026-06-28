@@ -109,7 +109,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="btn-brand w-full py-[12px] text-[16px] disabled:opacity-50"
+              className="btn-primary w-full py-[12px] text-[16px] disabled:opacity-50"
             >
               {loading ? "注册中..." : "注册"}
             </button>

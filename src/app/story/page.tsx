@@ -26,7 +26,7 @@ export default function StoryPage() {
       </div>
 
       <div className="text-center mt-[60px]">
-        <Link href="/products" className="btn-brand">
+        <Link href="/products" className="btn-primary">
           探索 Nonta 产品
         </Link>
       </div>

@@ -14,7 +14,7 @@ export default function CartPage() {
         <div className="flex flex-col items-center gap-[20px]">
           <ShoppingCart size={48} className="text-[#DDD]" />
           <p className="text-[16px] text-[#999]">购物车是空的</p>
-          <Link href="/products" className="btn-brand-outline">
+          <Link href="/products" className="btn-outline">
             去逛逛
           </Link>
         </div>
@@ -162,7 +162,7 @@ export default function CartPage() {
 
             <Link
               href="/checkout"
-              className="btn-brand w-full mt-[20px] text-[16px] py-[12px] text-center"
+              className="btn-primary w-full mt-[20px] text-[16px] py-[12px] text-center"
             >
               去结算
             </Link>
