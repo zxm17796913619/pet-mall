@@ -5,6 +5,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Toaster } from "react-hot-toast";
 import { CartProvider } from "@/hooks/useCart";
+import { ScrollToTop } from "@/components/ui/ScrollToTop";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -39,6 +40,7 @@ export default function RootLayout({
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />
+          <ScrollToTop />
           <Toaster position="top-center" />
         </CartProvider>
       </body>
