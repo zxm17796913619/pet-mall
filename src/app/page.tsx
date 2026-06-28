@@ -2,145 +2,82 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { PET_CATEGORIES, TRUST_BADGES } from "@/lib/constants";
-import { products, banners } from "@/lib/mock-data";
-import { ChevronRight, ArrowRight } from "lucide-react";
+import { products } from "@/lib/mock-data";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { ProductCard } from "@/components/product/ProductCard";
 
 function CountUp({ target }: { target: number }) {
-  const [count, setCount] = useState(0);
-  const [started, setStarted] = useState(false);
-  const ref = useRef<HTMLSpanElement>(null);
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setStarted(true); }, { threshold: 0.6 });
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!started) return;
-    let v = 0;
-    const inc = target / 100;
-    const t = setInterval(() => {
-      v += inc;
-      if (v >= target) { setCount(target); clearInterval(t); }
-      else setCount(Math.floor(v));
-    }, 16);
-    return () => clearInterval(t);
-  }, [started, target]);
-
-  return <span ref={ref}>{count}</span>;
+  const [c, set] = useState(0); const [s, st] = useState(false); const r = useRef<HTMLSpanElement>(null);
+  useEffect(() => { const o = new IntersectionObserver(([e]) => { if (e.isIntersecting) st(true); }, { threshold: 0.6 }); if (r.current) o.observe(r.current); return () => o.disconnect(); }, []);
+  useEffect(() => { if (!s) return; let v = 0; const inc = target / 100; const t = setInterval(() => { v += inc; if (v >= target) { set(target); clearInterval(t); } else set(Math.floor(v)); }, 16); return () => clearInterval(t); }, [s, target]);
+  return <span ref={r}>{c}</span>;
 }
 
 export default function HomePage() {
-  const [currentBanner, setCurrentBanner] = useState(0);
   const featured = products.filter((p) => p.isFeatured);
-
-  useEffect(() => {
-    const t = setInterval(() => setCurrentBanner((p) => (p + 1) % banners.length), 5000);
-    return () => clearInterval(t);
-  }, []);
+  const newest = [...products].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 4);
 
   return (
     <div>
       {/* ================================================================ */}
-      {/* HERO BANNER                                                    */}
+      {/* HERO — Full bleed, dramatic typography                          */}
       {/* ================================================================ */}
-      <section className="relative overflow-hidden">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentBanner}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.7 }}
-            className={banners[currentBanner].bgClass}
-          >
-            <div className="container-page py-20 sm:py-28 lg:py-40 text-center">
-              <motion.h1
-                initial={{ y: 24, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.15, duration: 0.6 }}
-                className="text-[34px] sm:text-[52px] lg:text-[64px] font-bold mb-6 tracking-tight leading-none"
-                style={{ fontFamily: "var(--font-display)" }}
-              >
-                <span className={banners[currentBanner].textColor}>
-                  {banners[currentBanner].title}
-                </span>
-              </motion.h1>
-              <motion.p
-                initial={{ y: 16, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.3, duration: 0.6 }}
-                className="text-sm sm:text-base lg:text-lg text-stone-500 mb-10 sm:mb-12 leading-relaxed whitespace-pre-line max-w-lg mx-auto"
-              >
-                {banners[currentBanner].subtitle}
-              </motion.p>
-              <motion.div
-                initial={{ y: 12, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.45, duration: 0.6 }}
-              >
-                <Link href="/products" className="btn-primary px-8 py-3 text-[15px] group">
-                  立即选购
-                  <ChevronRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
+      <section className="relative min-h-[90vh] flex items-center bg-[#F3EFEA]">
+        {/* Subtle pattern overlay */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "radial-gradient(circle, #1C1917 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
+        <div className="container-page relative z-10 py-24 md:py-32">
+          <div className="max-w-[640px]">
+            <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}>
+              <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#B8753E] mb-6 block">
+                Premium Pet Goods
+              </span>
+              <h1 className="text-[42px] sm:text-[64px] lg:text-[80px] font-bold leading-[0.95] tracking-[-0.02em] text-[#1C1917] mb-8" style={{ fontFamily: "var(--font-display)" }}>
+                与宠物一起<br />
+                <span className="text-[#B8753E]">自由与温暖</span>
+              </h1>
+              <p className="text-[15px] sm:text-[17px] text-[#5C5752] leading-relaxed mb-10 max-w-[480px]">
+                以水獭 Nonta 为灵感，将充满爱意的产品送到你手中。<br />
+                功能与美的融合，为爱宠带来最贴心的呵护。
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <Link href="/products" className="btn-primary">
+                  探索产品 <ArrowRight size={15} />
                 </Link>
-              </motion.div>
-            </div>
-          </motion.div>
-        </AnimatePresence>
-
-        <div className="flex justify-center gap-2.5 pb-8 -mt-8">
-          {banners.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrentBanner(i)}
-              className={`h-2 rounded-full transition-all duration-300 ${
-                i === currentBanner ? "bg-brand w-8" : "bg-stone-300 w-2 hover:bg-stone-400"
-              }`}
-            />
-          ))}
+                <Link href="/story" className="btn-outline">
+                  品牌故事
+                </Link>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
       {/* ================================================================ */}
-      {/* CATEGORY ENTRY                                                  */}
+      {/* CATEGORIES — Oversized cards with hover reveal                  */}
       {/* ================================================================ */}
-      <section className="section-padding">
+      <section className="py-24 md:py-32 bg-white">
         <div className="container-page">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12 sm:mb-16"
-          >
-            <span className="badge bg-stone-100 text-stone-500 mb-3">Categories</span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-stone-900 mb-3" style={{ fontFamily: "var(--font-display)" }}>
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mb-16 md:mb-20">
+            <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-[#B8753E] mb-3 block">Categories</span>
+            <h2 className="text-[28px] sm:text-[40px] font-bold text-[#1C1917] tracking-[-0.01em]" style={{ fontFamily: "var(--font-display)" }}>
               为爱宠选购
             </h2>
-            <p className="text-sm text-stone-500">选择你的宠物类型，发现专属好物</p>
           </motion.div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-5">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
             {PET_CATEGORIES.map((cat, i) => (
               <motion.div
                 key={cat.key}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.06, duration: 0.4 }}
-                whileHover={{ y: -4 }}
+                initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+                transition={{ delay: i * 0.05, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
               >
                 <Link
                   href={`/products?pet=${cat.key}`}
-                  className={`flex flex-col items-center gap-4 p-6 sm:p-8 rounded-2xl transition-shadow hover:shadow-md ${cat.bgClass}`}
+                  className="group flex flex-col items-center gap-5 p-8 md:p-10 bg-[#F3EFEA] hover:bg-[#B8753E] transition-colors duration-300 rounded-lg text-center h-full"
                 >
-                  <cat.icon size={32} className="text-stone-600" />
-                  <span className="text-[13px] sm:text-sm font-medium text-stone-700">
-                    {cat.name}
-                  </span>
+                  <cat.icon size={36} className="text-[#5C5752] group-hover:text-white transition-colors duration-300" />
+                  <span className="text-[13px] font-medium text-[#1C1917] group-hover:text-white transition-colors duration-300 tracking-wide">{cat.name}</span>
                 </Link>
               </motion.div>
             ))}
@@ -149,67 +86,41 @@ export default function HomePage() {
       </section>
 
       {/* ================================================================ */}
-      {/* FEATURED PRODUCTS                                               */}
+      {/* FEATURED — Magazine grid with hero product                     */}
       {/* ================================================================ */}
-      <section className="section-padding bg-white">
+      <section className="py-24 md:py-32 bg-[#FAF7F4]">
         <div className="container-page">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12 sm:mb-16"
-          >
-            <span className="badge bg-stone-100 text-stone-500 mb-3">Hot Sale</span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-stone-900 mb-3" style={{ fontFamily: "var(--font-display)" }}>
-              热卖推荐
-            </h2>
-            <p className="text-sm text-stone-500">精选好物，为爱宠带来最好的呵护</p>
-          </motion.div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
+          <div className="flex items-end justify-between mb-16 md:mb-20">
+            <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
+              <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-[#B8753E] mb-3 block">Featured</span>
+              <h2 className="text-[28px] sm:text-[40px] font-bold text-[#1C1917] tracking-[-0.01em]" style={{ fontFamily: "var(--font-display)" }}>
+                热卖推荐
+              </h2>
+            </motion.div>
+            <Link href="/products" className="hidden sm:flex items-center gap-2 text-[13px] font-medium text-[#5C5752] hover:text-[#1C1917] transition-colors uppercase tracking-wide">
+              查看全部 <ArrowUpRight size={14} />
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
             {featured.map((p, i) => (
               <ProductCard key={p.id} product={p} index={i} />
             ))}
           </div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center mt-12 sm:mt-16"
-          >
-            <Link href="/products" className="btn-outline group text-[14px] px-7 py-2.5">
-              查看全部商品
-              <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
-            </Link>
-          </motion.div>
         </div>
       </section>
 
       {/* ================================================================ */}
-      {/* STATS BAR                                                       */}
+      {/* STATS — Dark bar with count-up numbers                         */}
       {/* ================================================================ */}
-      <section className="bg-stone-900 py-16 sm:py-20">
+      <section className="bg-[#1C1917] py-20 md:py-24">
         <div className="container-page">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 text-center">
-            {[
-              { t: 1280, l: "满意顾客", s: "+" },
-              { t: 368, l: "精选商品", s: "+" },
-              { t: 99, l: "好评率", s: "%" },
-              { t: 24, l: "小时发货", s: "h" },
-            ].map((item, i) => (
-              <motion.div
-                key={item.l}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08, type: "spring", stiffness: 200 }}
-                className="flex flex-col items-center gap-2"
-              >
-                <span className="text-3xl sm:text-4xl font-bold text-white" style={{ fontFamily: "var(--font-display)" }}>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-10 text-center">
+            {[{ t: 1280, l: "满意顾客", s: "+" }, { t: 368, l: "精选商品", s: "+" }, { t: 99, l: "好评率", s: "%" }, { t: 24, l: "小时发货", s: "h" }].map((item, i) => (
+              <motion.div key={item.l} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}>
+                <div className="text-[40px] md:text-[56px] font-bold text-white tracking-tight" style={{ fontFamily: "var(--font-display)" }}>
                   <CountUp target={item.t} />{item.s}
-                </span>
-                <span className="text-xs sm:text-sm text-stone-400 tracking-wide">{item.l}</span>
+                </div>
+                <div className="text-[11px] text-[#A09990] mt-2 uppercase tracking-[0.15em]">{item.l}</div>
               </motion.div>
             ))}
           </div>
@@ -217,76 +128,75 @@ export default function HomePage() {
       </section>
 
       {/* ================================================================ */}
-      {/* BRAND STORY                                                     */}
+      {/* BRAND STORY — Split layout                                     */}
       {/* ================================================================ */}
-      <section className="section-padding bg-stone-100">
-        <div className="container-page max-w-[720px] text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <span className="badge bg-white text-stone-500 mb-4">Brand Story</span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-stone-800 mb-8" style={{ fontFamily: "var(--font-display)" }}>
-              品牌故事
-            </h2>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.15 }}
-            className="space-y-5 text-[15px] sm:text-base text-stone-600 leading-relaxed"
-          >
-            <p>
-              Nonta 源自对宠物的深深热爱。我们相信，宠物不仅是生活中的伙伴，更是家庭中不可或缺的成员。
-            </p>
-            <p>
-              我们以水獭 Nonta 为灵感，致力于为每个养宠家庭提供兼具功能与美的产品。
-              每一件 Nonta 出品，都经过严格甄选，只为给爱宠最贴心的守护。
-            </p>
-            <p>
-              宠物是家人。Nonta，与你一起守护这份温暖。
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-            className="mt-10"
-          >
-            <Link
-              href="/story"
-              className="inline-flex items-center gap-2 text-brand text-sm font-medium decorative-dot hover:opacity-80 transition-opacity"
-            >
-              了解更多
-            </Link>
-          </motion.div>
+      <section className="py-24 md:py-32 bg-white">
+        <div className="container-page">
+          <div className="grid md:grid-cols-2 gap-16 md:gap-20 items-center">
+            <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}>
+              <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-[#B8753E] mb-4 block">Brand Story</span>
+              <h2 className="text-[28px] sm:text-[40px] font-bold text-[#1C1917] mb-8 tracking-[-0.01em]" style={{ fontFamily: "var(--font-display)" }}>
+                品牌故事
+              </h2>
+              <div className="space-y-5 text-[15px] text-[#5C5752] leading-relaxed">
+                <p>Nonta 源自对宠物的深深热爱。品牌以一只名叫 Nonta 的水獭为灵感——聪慧、灵动、充满好奇心，正如我们身边的每一只毛孩子。</p>
+                <p>我们相信，宠物不仅是生活伙伴，更是家庭中不可或缺的成员。每一件 Nonta 产品，都承载着我们对品质的坚持与对宠物的深情。</p>
+                <p>宠物是家人。Nonta，与你一起守护这份温暖。</p>
+              </div>
+              <Link href="/story" className="inline-flex items-center gap-2 mt-8 text-[13px] font-semibold text-[#B8753E] hover:text-[#9C6030] uppercase tracking-[0.1em] transition-colors">
+                了解更多 <ArrowRight size={14} />
+              </Link>
+            </motion.div>
+            <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="relative">
+              <div className="aspect-[4/5] bg-[#F3EFEA] rounded-lg overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1544568100-847a948585b9?w=800&q=85" alt="Nonta 品牌" className="w-full h-full object-cover" />
+              </div>
+              <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-lg shadow-sm border border-[#F0EBE3] hidden md:block">
+                <p className="text-[11px] font-semibold text-[#B8753E] uppercase tracking-[0.2em]">Since</p>
+                <p className="text-[32px] font-bold text-[#1C1917] tracking-tight" style={{ fontFamily: "var(--font-display)" }}>2020</p>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
       {/* ================================================================ */}
-      {/* TRUST BADGES                                                    */}
+      {/* NEW ARRIVALS                                                   */}
       {/* ================================================================ */}
-      <section className="section-padding bg-white">
+      <section className="py-24 md:py-32 bg-[#FAF7F4]">
         <div className="container-page">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8 text-center">
+          <div className="flex items-end justify-between mb-16 md:mb-20">
+            <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
+              <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-[#B8753E] mb-3 block">New Arrivals</span>
+              <h2 className="text-[28px] sm:text-[40px] font-bold text-[#1C1917] tracking-[-0.01em]" style={{ fontFamily: "var(--font-display)" }}>
+                最新上架
+              </h2>
+            </motion.div>
+            <Link href="/products?sort=newest" className="hidden sm:flex items-center gap-2 text-[13px] font-medium text-[#5C5752] hover:text-[#1C1917] transition-colors uppercase tracking-wide">
+              查看全部 <ArrowUpRight size={14} />
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+            {newest.map((p, i) => (
+              <ProductCard key={p.id} product={p} index={i} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ================================================================ */}
+      {/* TRUST BADGES                                                   */}
+      {/* ================================================================ */}
+      <section className="py-20 md:py-24 bg-white border-t border-[#E8E3DC]">
+        <div className="container-page">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {TRUST_BADGES.map((item, i) => (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08 }}
-                whileHover={{ y: -4 }}
-                className="flex flex-col items-center gap-3 py-8 px-4 rounded-2xl hover:bg-stone-50 transition-colors cursor-default"
-              >
-                <item.icon size={28} className="text-stone-400" />
-                <h4 className="text-[15px] font-medium text-stone-700">{item.title}</h4>
-                <p className="text-xs text-stone-400">{item.desc}</p>
+              <motion.div key={item.title} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06 }} className="flex flex-col items-center text-center gap-3 py-6">
+                <item.icon size={28} className="text-[#B8753E]" />
+                <div>
+                  <h4 className="text-[14px] font-semibold text-[#1C1917] mb-1">{item.title}</h4>
+                  <p className="text-[12px] text-[#A09990]">{item.desc}</p>
+                </div>
               </motion.div>
             ))}
           </div>
